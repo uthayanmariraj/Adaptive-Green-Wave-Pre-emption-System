@@ -1,0 +1,117 @@
+Step 181.0: [AMB-01] A1 index 7 already G. State: GGgrrrGGG
+Step 182.0: [AMB-01] A1 index 7 already G. State: GGgrrrGGG
+Step 183.0: [AMB-01] A1 index 7 already G. State: GGgrrrGGG
+Step 183.0: [AMB-02] A1 index 8 already G. State: GGgrrrGGG
+Step 184.0: [AMB-01] A1 index 7 already G. State: GGgrrrGGG
+Step 184.0: [AMB-02] A1 index 8 already G. State: GGgrrrGGG
+Step 185.0: [AMB-01] A1 index 7 already G. State: GGgrrrGGG
+Step 185.0: [AMB-02] A1 index 8 already G. State: GGgrrrGGG
+Step 186.0: [AMB-01] A1 index 7 already G. State: GGgrrrGGG
+Step 186.0: [AMB-02] A1 index 8 already G. State: GGgrrrGGG
+Step 187.0: [AMB-01] A1 index 7 already G. State: GGgrrrGGG
+Step 187.0: [AMB-02] A1 index 8 already G. State: GGgrrrGGG
+Step 188.0: [AMB-01] A1 index 7 already G. State: GGgrrrGGG
+Step 188.0: [AMB-02] A1 index 8 already G. State: GGgrrrGGG
+Step 189.0: [AMB-01] A1 index 7 already G. State: GGgrrrGGG
+Step 189.0: [AMB-02] A1 index 8 already G. State: GGgrrrGGG
+Step 190.0: [AMB-01] A2 index 7 already G. State: GGgrrrGGG
+Step 190.0: [AMB-01] Queued release for A1
+Step 190.0: [AMB-02] A1 index 7 already G. State: GGgrrrGGG
+Step 191.0: [AMB-01] A2 index 7 already G. State: GGgrrrGGG
+Step 191.0: [AMB-02] A1 index 7 already G. State: GGgrrrGGG
+Step 192.0: [AMB-01] A2 index 7 already G. State: GGgrrrGGG
+Step 192.0: [AMB-02] A1 index 7 already G. State: GGgrrrGGG
+Step 193.0: [AMB-01] A2 index 7 already G. State: GGgrrrGGG
+Step 193.0: [AMB-02] A1 index 7 already G. State: GGgrrrGGG
+Step 194.0: [AMB-01] A2 index 7 already G. State: GGgrrrGGG
+Step 194.0: [AMB-01] Executed delayed release for A1
+Step 194.0: [AMB-02] A2 index 7 already G. State: GGgrrrGGG
+Step 194.0: [AMB-02] Queued release for A1
+Step 195.0: [AMB-01] A2 index 7 already G. State: GGgrrrGGG
+Step 195.0: [AMB-02] A2 index 7 already G. State: GGgrrrGGG
+Step 196.0: [AMB-01] A2 index 7 already G. State: GGgrrrGGG
+Step 196.0: [AMB-02] A2 index 7 already G. State: GGgrrrGGG
+Step 197.0: [AMB-01] A2 index 7 already G. State: GGgrrrGGG
+Step 197.0: [AMB-02] A2 index 7 already G. State: GGgrrrGGG
+Step 198.0: [AMB-01] A2 index 7 already G. State: GGgrrrGGG
+Step 198.0: [AMB-02] A2 index 7 already G. State: GGgrrrGGG
+Step 198.0: [AMB-02] Executed delayed release for A1
+Step 199.0: [AMB-01] A2 index 7 already G. State: GGgrrrGGG
+Step 199.0: [AMB-02] A2 index 7 already G. State: GGgrrrGGG
+Step 200.0: [AMB-01] A2 index 7 already G. State: GGgrrrGGG
+Step 200.0: [AMB-02] A2 index 7 already G. State: GGgrrrGGG
+Step 201.0: [AMB-01] Queued release for A2
+Step 201.0: [AMB-02] A2 index 7 already G. State: GGgrrrGGG
+Step 202.0: [AMB-02] A2 index 7 already G. State: GGgrrrGGG
+Step 203.0: [AMB-02] A2 index 7 already G. State: GGgrrrGGG
+Step 204.0: [AMB-02] A2 index 7 already G. State: GGgrrrGGG
+Step 205.0: [AMB-01] Executed delayed release for A2
+Step 205.0: [AMB-02] A2 index 7 already G. State: GGgrrrGGG
+Step 206.0: [AMB-02] Queued release for A2
+Step 210.0: [AMB-02] Executed delayed release for A2
+Step 211.0: [AMB-01] B3 index 7 already G. State: GGgrrrGGG
+Step 212.0: [AMB-01] B3 index 7 already G. State: GGgrrrGGG
+Step 213.0: [AMB-01] B3 index 7 already G. State: GGgrrrGGG
+Step 214.0: [AMB-01] B3 index 7 already G. State: GGgrrrGGG
+Step 215.0: [AMB-01] B3 index 7 already G. State: GGgrrrGGG
+Step 216.0: [AMB-01] B3 index 7 already G. State: GGgrrrGGG
+Step 217.0: [AMB-01] B3 index 7 already G. State: GGgrrrGGG
+Step 217.0: [AMB-02] B3 index 7 already G. State: GGgrrrGGG
+Step 218.0: [AMB-01] B3 index 7 already G. State: GGgrrrGGG
+Step 218.0: [AMB-02] B3 index 7 already G. State: GGgrrrGGG
+Step 219.0: [AMB-01] B3 index 7 already G. State: GGgrrrGGG
+Step 219.0: [AMB-02] B3 index 7 already G. State: GGgrrrGGG
+Step 220.0: [AMB-01] B3 index 7 already G. State: GGgrrrGGG
+Step 220.0: [AMB-02] B3 index 7 already G. State: GGgrrrGGG
+Step 221.0: [AMB-01] B3 index 7 already G. State: GGgrrrGGG
+Step 221.0: [AMB-02] B3 index 7 already G. State: GGgrrrGGG
+Step 222.0: [AMB-01] B3 index 7 already G. State: GGgrrrGGG
+Step 222.0: [AMB-02] B3 index 7 already G. State: GGgrrrGGG
+Step 223.0: [AMB-01] Forced GREEN at B3 index 7 (road=A3B3). State: yyyrrrGGG
+Step 223.0: [AMB-02] B3 index 7 already G. State: yyyrrrGGG
+Step 224.0: [AMB-01] B3 index 7 already G. State: yyyrrrGGG
+Step 224.0: [AMB-02] B3 index 7 already G. State: yyyrrrGGG
+Step 225.0: [AMB-01] Forced GREEN at C3 index 7 (road=:B3_7). State: yyyrrrGGy
+Step 225.0: [AMB-01] Queued release for B3
+Step 225.0: [AMB-02] B3 index 7 already G. State: yyyrrrGGG
+Step 226.0: [AMB-01] C3 index 7 already G. State: yyyrrrGGy
+Step 226.0: [AMB-02] B3 index 7 already G. State: yyyrrrGGG
+Step 227.0: [AMB-01] Forced GREEN at C3 index 7 (road=B3C3). State: yyyrrrGGG
+Step 227.0: [AMB-02] B3 index 7 already G. State: yyyrrrGGG
+Step 228.0: [AMB-01] C3 index 7 already G. State: yyyrrrGGG
+Step 228.0: [AMB-02] B3 index 7 already G. State: yyyrrrGGG
+Step 229.0: [AMB-01] C3 index 7 already G. State: yyyrrrGGG
+Step 229.0: [AMB-01] Executed delayed release for B3
+Step 229.0: [AMB-02] Forced GREEN at B3 index 7 (road=A3B3). State: rrrGGGGGG
+Step 230.0: [AMB-01] C3 index 7 already G. State: yyyrrrGGG
+Step 230.0: [AMB-02] B3 index 7 already G. State: rrrGGGGGG
+Step 231.0: [AMB-01] C3 index 7 already G. State: yyyrrrGGG
+Step 231.0: [AMB-02] B3 index 7 already G. State: rrrGGGGGG
+Step 232.0: [AMB-01] C3 index 7 already G. State: yyyrrrGGG
+Step 232.0: [AMB-02] B3 index 7 already G. State: rrrGGGGGG
+Step 233.0: [AMB-01] C3 index 7 already G. State: yyyrrrGGG
+Step 233.0: [AMB-02] C3 index 7 already G. State: yyyrrrGGG
+Step 233.0: [AMB-02] Queued release for B3
+Step 234.0: [AMB-01] C3 index 7 already G. State: yyyrrrGGG
+Step 234.0: [AMB-02] C3 index 7 already G. State: yyyrrrGGG
+Step 235.0: [AMB-01] C3 index 7 already G. State: yyyrrrGGG
+Step 235.0: [AMB-02] C3 index 7 already G. State: yyyrrrGGG
+Step 236.0: [AMB-01] C3 index 7 already G. State: yyyrrrGGG
+Step 236.0: [AMB-02] C3 index 7 already G. State: yyyrrrGGG
+Step 237.0: [AMB-01] Queued release for C3
+Step 237.0: [AMB-02] C3 index 7 already G. State: yyyrrrGGG
+Step 237.0: [AMB-02] Executed delayed release for B3
+Step 238.0: [AMB-02] C3 index 7 already G. State: yyyrrrGGG
+Step 239.0: [AMB-02] C3 index 7 already G. State: yyyrrrGGG
+Step 240.0: [AMB-02] C3 index 7 already G. State: yyyrrrGGG
+Step 241.0: [AMB-01] Executed delayed release for C3
+Step 241.0: [AMB-02] Forced GREEN at C3 index 7 (road=B3C3). State: rrrGGGGGG
+Step 242.0: [AMB-02] C3 index 7 already G. State: rrrGGGGGG
+Step 243.0: [AMB-02] C3 index 7 already G. State: rrrGGGGGG
+Step 244.0: [AMB-02] C3 index 7 already G. State: rrrGGGGGG
+Step 245.0: [AMB-02] C3 index 8 already G. State: rrrGGGGGG
+Step 246.0: [AMB-02] C3 index 8 already G. State: rrrGGGGGG
+Step 247.0: [AMB-02] Queued release for C3
+Step 248.0: [AMB-01] ARRIVED at City Hospital
+Step 251.0: [AMB-02] Executed delayed release for C3
+Step 259.0: [AMB-02] ARRIVED at City Hospital

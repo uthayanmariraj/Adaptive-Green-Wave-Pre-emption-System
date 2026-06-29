@@ -1,0 +1,1 @@
+{"ambulance_id": "AMB-02", "eta": 0, "distance": 0.0, "total_length": 791.2, "injury_level": "Medium", "origin": "INT-11", "destination": "City Hospital", "scenario": "D", "issue": "Emergency", "next_stop": "Arrived", "has_departed": true, "release_queue": {}, "arrival_time": 1776501164.418013}

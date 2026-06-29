@@ -1,0 +1,32 @@
+{
+  "ambulances": [
+    {
+      "id": "AMB-01",
+      "issue": "Moderate Injury \u2014 En Route",
+      "origin": "INT-11",
+      "destination": "City Hospital",
+      "dest": "City Hospital",
+      "scenario": "D",
+      "evrt": 55,
+      "status": "Completed",
+      "progress": 100.0,
+      "injury_level": "Medium",
+      "eta": 0
+    },
+    {
+      "id": "AMB-02",
+      "issue": "Moderate Injury \u2014 En Route",
+      "origin": "INT-11",
+      "destination": "City Hospital",
+      "dest": "City Hospital",
+      "scenario": "D",
+      "evrt": 55,
+      "status": "Completed",
+      "progress": 100.0,
+      "injury_level": "Medium",
+      "eta": 0
+    }
+  ],
+  "queue_cleared_rate": 100,
+  "last_updated": 1776501170.976631
+}

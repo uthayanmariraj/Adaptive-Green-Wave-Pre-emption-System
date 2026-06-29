@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AGWPS — Adaptive Green Wave Pre-emption System</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --font-sans: 'DM Mono', monospace
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 0 24px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100
+    }
+
+    .navbar-brand {
+      font-size: 13px;
+      font-weight: 500;
+      color: #94a3b8;
+      margin-right: 32px;
+      letter-spacing: .5px;
+      text-transform: uppercase
+    }
+
+    .nav-tab {
+      padding: 0 20px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      cursor: pointer;
+      color: #64748b;
+      border-bottom: 2px solid transparent;
+      transition: all .15s;
+      background: none;
+      border-left: none;
+      border-right: none;
+      border-top: none;
+      font-family: var(--font-sans)
+    }
+
+    .nav-tab:hover {
+      color: #e2e8f0
+    }
+
+    .nav-tab.active {
+      color: #38bdf8;
+      border-bottom: 2px solid #38bdf8
+    }
+
+    /* ── Page ── */
+    .page {
+      display: none
+    }
+
+    .page.active {
+      display: flex
+    }
+
+    /* ── Shared sidebar/main ── */
+    .sidebar {
+      width: 260px;
+      min-height: calc(100vh - 52px);
+      background: #1e293b;
+      border-right: 1px solid #334155;
+      flex-shrink: 0;
+      padding: 20px 16px;
+      overflow-y: auto
+    }
+
+    .main {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      min-height: calc(100vh - 52px)
+    }
+
+    /* ── Page 1 — Dispatch New Run ── */
+    .p1-shell {
+      display: flex;
+      min-height: calc(100vh - 52px);
+      width: 100%
+    }
+
+    .p1-sidebar {
+      width: 340px;
+      background: #1e293b;
+      border-right: 1px solid #334155;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 16px;
+      gap: 16px;
+      min-height: calc(100vh - 52px);
+      flex-shrink: 0;
+      overflow-y: auto
+    }
+
+    .p1-main {
+      flex: 1;
+      padding: 28px 32px;
+      background: #0f172a;
+      overflow-y: auto
+    }
+
+    /* status pill */
+    .sys-pill {
+      background: #052e16;
+      border: 1px solid #065f46;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .sys-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #34d399;
+      flex-shrink: 0;
+      animation: pulse 2s infinite
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .4
+      }
+    }
+
+    /* section labels */
+    .sec-label {
+      font-size: 10px;
+      font-weight: 500;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: .9px
+    }
+
+    /* amb cards (p1) */
+    .amb-card-p1 {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 10px;
+      position: relative;
+      transition: border-color .2s
+    }
+
+    .amb-card-p1.completing {
+      border-color: #065f46
+    }
+
+    .amb-id-p1 {
+      font-size: 13px;
+      font-weight: 500;
+      color: #38bdf8;
+      margin-bottom: 3px
+    }
+
+    .amb-issue-p1 {
+      font-size: 12px;
+      color: #e2e8f0;
+      margin-bottom: 5px;
+      line-height: 1.4
+    }
+
+    .amb-route-p1 {
+      font-size: 11px;
+      color: #64748b;
+      margin-bottom: 8px
+    }
+
+    .meta-row-p1 {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap
+    }
+
+    /* progress */
+    .prog-bg {
+      background: #1e3a5f;
+      border-radius: 3px;
+      height: 4px
+    }
+
+    .prog-fill {
+      height: 4px;
+      border-radius: 3px;
+      background: #38bdf8;
+      transition: width .8s linear
+    }
+
+    .prog-label {
+      font-size: 10px;
+      color: #475569;
+      margin-top: 3px;
+      display: flex;
+      justify-content: space-between
+    }
+
+    /* stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    .stat-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px
+    }
+
+    .stat-val {
+      font-size: 22px;
+      font-weight: 500;
+      color: #e2e8f0
+    }
+
+    .stat-lbl {
+      font-size: 10px;
+      color: #64748b;
+      margin-top: 2px
+    }
+
+    /* shared badges */
+    .badge {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap
+    }
+
+    .b-amber,
+    .badge-amber {
+      background: #451a03;
+      color: #fbbf24
+    }
+
+    .b-green,
+    .badge-green {
+      background: #052e16;
+      color: #34d399
+    }
+
+    .b-blue,
+    .badge-blue {
+      background: #042c53;
+      color: #60a5fa
+    }
+
+    .badge-gray {
+      background: #1e293b;
+      color: #94a3b8
+    }
+
+    /* p1 form */
+    .main-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: #e2e8f0;
+      margin-bottom: 4px
+    }
+
+    .main-sub {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 24px
+    }
+
+    .form-row-p1,
+    .form-group {
+      margin-bottom: 14px
+    }
+
+    .form-label,
+    .form-lbl {
+      font-size: 12px;
+      color: #94a3b8;
+      display: block;
+      margin-bottom: 5px
+    }
+
+    .finput,
+    .fsel,
+    .ftarea,
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: #e2e8f0;
+      font-family: var(--font-sans);
+      outline: none
+    }
+
+    .finput:focus,
+    .fsel:focus,
+    .ftarea:focus,
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: #38bdf8
+    }
+
+    .ftarea,
+    .form-textarea {
+      resize: vertical;
+      min-height: 64px
+    }
+
+    .radio-row,
+    .radio-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap
+    }
+
+    .radio-row label,
+    .radio-group label {
+      font-size: 12px;
+      color: #94a3b8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .btn-dispatch,
+    .btn-primary {
+      width: 100%;
+      background: #0369a1;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 11px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: background .15s;
+      font-family: var(--font-sans)
+    }
+
+    .btn-dispatch:hover,
+    .btn-primary:hover {
+      background: #0284c7
+    }
+
+    .btn-danger {
+      background: #7f1d1d;
+      color: #fca5a5;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      width: 100%;
+      font-family: var(--font-sans)
+    }
+
+    .btn-sm {
+      width: auto;
+      padding: 8px 16px
+    }
+
+    .toast-area {
+      min-height: 40px
+    }
+
+    /* scenario comparison table (p1) */
+    .scen-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 24px
+    }
+
+    .scen-table th {
+      color: #475569;
+      font-weight: 500;
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 1px solid #334155
+    }
+
+    .scen-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #1e293b;
+      color: #94a3b8
+    }
+
+    .scen-table tr.cur td {
+      background: #0c1a2e;
+      color: #cbd5e1
+    }
+
+    .best,
+    .best-badge {
+      background: #0c3553;
+      color: #60a5fa;
+      font-size: 9px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      margin-left: 6px;
+      vertical-align: middle
+    }
+
+    /* divider */
+    .divider {
+      border: none;
+      border-top: 1px solid #334155
+    }
+
+    /* ── Page 3 — Hospital Dashboard ── */
+    .section-title {
+      font-size: 11px;
+      font-weight: 500;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 12px
+    }
+
+    .grid-section,
+    .table-section {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px
+    }
+
+    .grid-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: #94a3b8;
+      margin-bottom: 16px
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px
+    }
+
+    th {
+      color: #64748b;
+      font-weight: 500;
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid #334155
+    }
+
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #1e293b;
+      color: #cbd5e1
+    }
+
+    .stat-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px
+    }
+
+    .stat-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 16px
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #64748b;
+      margin-bottom: 6px
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 500;
+      color: #e2e8f0
+    }
+
+    .stat-unit {
+      font-size: 12px;
+      color: #64748b;
+      margin-left: 4px
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px
+    }
+
+    .inc-card {
+      background: #0f172a;
+      border-left: 3px solid #f59e0b;
+      border-radius: 6px;
+      padding: 14px;
+      margin-bottom: 10px
+    }
+
+    .progress-bg {
+      background: #334155;
+      border-radius: 4px;
+      height: 6px;
+      margin-top: 8px
+    }
+
+    .progress-fill {
+      background: #38bdf8;
+      height: 6px;
+      border-radius: 4px;
+      width: 65%
+    }
+
+    .fleet-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #334155
+    }
+
+    .fleet-item:last-child {
+      border-bottom: none
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
+
+    .dot-amber {
+      background: #f59e0b
+    }
+
+    .dot-green {
+      background: #34d399
+    }
+
+    .fleet-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: #e2e8f0
+    }
+
+    .fleet-status {
+      font-size: 11px;
+      color: #64748b
+    }
+
+    .confirm-card {
+      background: #0a1f14;
+      border: 1px solid #065f46;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 12px
+    }
+
+    /* toast */
+    .toast {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 999;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: #e2e8f0;
+      min-width: 260px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .4);
+      display: none;
+      font-family: var(--font-sans)
+    }
+
+    .toast.show {
+      display: block
+    }
+
+    .toast.warn,
+    .toast-p1.warn {
+      border-color: #92400e;
+      background: #1c1008;
+      color: #fbbf24
+    }
+
+    .toast.ok,
+    .toast.success,
+    .toast-p1.ok {
+      border-color: #065f46;
+      background: #0a1f14;
+      color: #34d399
+    }
+
+    .toast-p1 {
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 12px;
+      display: none
+    }
+
+    .toast-p1.show {
+      display: block
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <span class="navbar-brand">AGWPS</span>
+    <button class="nav-tab active" onclick="switchPage('dispatch-new',this)">Dispatch New Run</button>
+    <button class="nav-tab" onclick="switchPage('hospital',this)">Hospital Dashboard</button>
+  </nav>
+
+  <div id="dispatch-new" class="page active" style="flex-direction:column">
+    <div class="p1-shell">
+      <div class="p1-sidebar">
+        <div>
+          <div class="sec-label" style="margin-bottom:10px">Active Runs</div>
+          <div id="p1-amb-list"></div>
+        </div>
+        <hr class="divider">
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-val" id="p1-s-enroute">0</div>
+            <div class="stat-lbl">En Route</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val" id="p1-s-completed">0</div>
+            <div class="stat-lbl">Completed</div>
+          </div>
+        </div>
+      </div>
+      <div class="p1-main">
+        <div class="main-title">Dispatch New Ambulance</div>
+        <div class="main-sub">Fill in the details below to create a new dispatch.</div>
+        <div class="form-row-p1"><label class="form-label">Ambulance ID</label><input class="finput" id="p1-f-id"
+            placeholder="e.g. AMB-03"></div>
+        <div class="form-row-p1"><label class="form-label">Issue / Complaint</label><textarea class="ftarea"
+            id="p1-f-issue" placeholder="Describe the emergency..."></textarea></div>
+        <div class="form-row-p1"><label class="form-label">Origin Intersection</label><select class="fsel"
+            id="p1-f-origin"></select></div>
+        <div class="form-row-p1">
+          <label class="form-label">Destination Hospital</label>
+          <select class="fsel" id="p1-f-dest">
+            <option>City Hospital</option>
+            <option>General Hospital</option>
+            <option>Metro Hospital</option>
+          </select>
+        </div>
+        <div class="toast-area">
+          <div class="toast-p1" id="p1-toast"></div>
+        </div>
+        <button class="btn-dispatch" onclick="p1Dispatch()">Dispatch &amp; Publish</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="hospital" class="page" style="flex-direction:column">
+    <div class="stat-bar" style="padding:20px 24px 0; justify-content: center;">
+      <div class="stat-card">
+        <div class="stat-label">Incoming</div>
+        <div class="stat-value" id="stat-incoming">1</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Available</div>
+        <div class="stat-value" id="stat-available">3</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Incidents Today</div>
+        <div class="stat-value" id="stat-incidents">2</div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 20px; padding:20px 24px">
+
+      <div class="grid-section" style="flex: 1;">
+        <div class="grid-title">Incoming Ambulances</div>
+        <div id="incoming-list"></div>
+      </div>
+
+      <div class="grid-section" style="flex: 1;">
+        <div class="grid-title">Fleet Status</div>
+        <div id="fleet-list"></div>
+      </div>
+
+    </div>
+    <div style="padding:0 24px 24px">
+      <div class="grid-section">
+        <div class="grid-title">Incident History</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Type</th>
+              <th>Pickup</th>
+              <th>Hospital</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="incident-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* ── Constants ── */
+    /* When served via Flask (localhost:5000) use relative path.
+       When opened as a plain file, fall back to the same directory. */
+    const SUMO_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+      ? '/sumo_output.json'
+      : 'sumo_output.json';
+    const FLASK_URL = 'http://localhost:5000';
+    const POLL_MS = 3000; /* poll every 3 seconds */
+
+    const INT_LABELS = [];
+    for (let r = 1; r <= 4; r++) for (let c = 1; c <= 4; c++) INT_LABELS.push(`INT-${r}${c}`);
+
+    const EVRT_BY_SCENARIO = { A: 118, B: 89, C: 78, D: 55 };
+
+    /* ── State ── */
+    /*
+      p1Runs  — master list of all runs the dashboard knows about.
+      Each entry: { id, issue, origin, dest, destination, scenario, evrt, status, progress, source }
+      source = 'sim'     → came from sumo_output.json
+      source = 'manual'  → dispatched via the form (not yet seen by sim)
+    
+      When the simulation writes a run with status "Completed" we update our local copy
+      and trigger removal from Active Runs + a toast notification.
+    */
+    let p1Runs = [];
+    let incidents = [];
+    let knownIds = new Set(); /* IDs we have already notified about completion */
+
+    /* ── Helpers ── */
+    function showToast(msg, type = 'ok') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast show ' + type;
+      clearTimeout(t._tid);
+      t._tid = setTimeout(() => t.className = 'toast', 4000);
+    }
+
+    function showP1Toast(msg, type = 'ok') {
+      const t = document.getElementById('p1-toast');
+      t.textContent = msg;
+      t.className = 'toast-p1 show ' + type;
+      clearTimeout(t._tid);
+      t._tid = setTimeout(() => t.className = 'toast-p1', 4000);
+    }
+
+    function fmtTime() {
+      const n = new Date();
+      return String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+    }
+
+    /* ── Page switching ── */
+    function switchPage(id, btn) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    /* ── Render sidebar (Page 1) ── */
+    function p1RenderSidebar() {
+      const active = p1Runs.filter(r => r.status === 'En Route');
+      const completed = p1Runs.filter(r => r.status === 'Completed');
+      const listEl = document.getElementById('p1-amb-list');
+
+      if (active.length === 0) {
+        listEl.innerHTML = `<div style="font-size:12px;color:#475569;text-align:center;padding:24px 0">No active runs</div>`;
+      } else {
+        listEl.innerHTML = active.map(r => {
+          return `
+        <div class="amb-card-p1" data-ambid="${r.id}">
+          <div class="amb-id-p1">${r.id}</div>
+          <div class="amb-issue-p1">${r.issue}</div>
+          <div class="amb-route-p1">${r.origin || '—'} → ${r.dest || r.destination || '—'}</div>
+          <div class="meta-row-p1">
+            <span class="badge b-amber">En Route</span>
+            <span class="badge b-blue">Scenario ${r.scenario || 'D'}</span>
+            <span style="font-size:10px;color:#64748b">EVRT ${r.evrt || '—'}s</span>
+          </div>
+        </div>`;
+        }).join('');
+      }
+
+      document.getElementById('p1-s-enroute').textContent = active.length;
+      document.getElementById('p1-s-completed').textContent = completed.length;
+
+      const doneWithEvrt = completed.filter(r => r.evrt);
+      if (doneWithEvrt.length) {
+        const avg = Math.round(doneWithEvrt.reduce((s, r) => s + Number(r.evrt), 0) / doneWithEvrt.length);
+        const el = document.getElementById('p1-s-evrt');
+        if (el) el.textContent = avg + 's';
+      } else {
+        const el = document.getElementById('p1-s-evrt');
+        if (el) el.textContent = '—';
+      }
+
+      renderHospital();
+    }
+
+    /* ── Render Hospital (Page 2) ── */
+    function renderHospital() {
+      const enRoute = p1Runs.filter(a => a.status === 'En Route');
+      document.getElementById('stat-incoming').textContent = enRoute.length;
+      document.getElementById('stat-available').textContent = Math.max(0, 4 - enRoute.length);
+
+      const done = p1Runs.filter(a => a.status === 'Completed' && a.evrt);
+      if (done.length) {
+        const avg = Math.round(done.reduce((s, a) => s + Number(a.evrt), 0) / done.length);
+        const stEvrt = document.getElementById('stat-evrt');
+        if (stEvrt) stEvrt.innerHTML = avg + '<span class="stat-unit">s</span>';
+      }
+      document.getElementById('stat-incidents').textContent = incidents.length;
+
+      document.getElementById('incoming-list').innerHTML = enRoute.length
+        ? enRoute.map(a => `
+        <div class="inc-card">
+          <div style="font-size:12px;font-weight:500;color:#fbbf24;margin-bottom:4px">${a.id} — ${a.issue}</div>
+          <div style="font-size:11px;color:#94a3b8">${a.origin || '—'} → ${a.dest || a.destination || '—'}</div>
+          <div style="font-size:11px;color:#64748b;margin-top:4px">EVRT: ${a.evrt || '—'}s | Scenario ${a.scenario || 'D'}</div>
+          <div class="progress-bg"><div class="progress-fill" style="width:${Math.min(100, Math.round(a.progress || 0))}%"></div></div>
+        </div>`).join('')
+        : '<div style="font-size:12px;color:#475569">No incoming ambulances</div>';
+
+      const fleetIds = ['AMB-01', 'AMB-02', 'AMB-03', 'AMB-04'];
+      document.getElementById('fleet-list').innerHTML = fleetIds.map(fid => {
+        const run = p1Runs.find(r => r.id === fid);
+        const en = run && run.status === 'En Route';
+        return `<div class="fleet-item">
+      <span class="dot ${en ? 'dot-amber' : 'dot-green'}"></span>
+      <div>
+        <div class="fleet-name">${fid}</div>
+        <div class="fleet-status">${en ? 'En Route — ' + (run.dest || run.destination || '') : 'Available'}</div>
+      </div>
+    </div>`;
+      }).join('');
+
+      document.getElementById('incident-tbody').innerHTML = incidents.map(i => `
+    <tr>
+      <td>${i.time}</td><td>${i.ambId ? '<span style="color:#38bdf8">' + i.ambId + '</span> — ' : ''}${i.type}</td><td>${i.pickup}</td><td>${i.hospital}</td>
+      <td><span class="badge ${i.status === 'Completed' ? 'b-green' : i.status === 'Dispatched' ? 'b-amber' : 'badge-gray'}">${i.status}</span></td>
+    </tr>`).join('');
+    }
+
+    /* ── Core: merge simulation data into p1Runs ── */
+    /*
+      Removal flow:
+        1. Sim marks ambulance Completed → server.py sets a COMPLETED_TTL timer.
+        2. After TTL the ambulance disappears from sumo_output.json.
+        3. On the next poll simIds no longer contains the id → we schedule removal
+           from p1Runs after REMOVAL_GRACE_MS so the "arrived" card stays briefly visible.
+    */
+    const REMOVAL_GRACE_MS = 8000;   /* ms to keep completed card visible before removal */
+    const removalTimers = {};      /* amb_id → setTimeout handle */
+
+    function scheduleRemoval(ambId) {
+      if (removalTimers[ambId]) return;   /* already scheduled */
+      removalTimers[ambId] = setTimeout(() => {
+        p1Runs = p1Runs.filter(r => r.id !== ambId);
+        delete removalTimers[ambId];
+        p1RenderSidebar();
+        console.log(`[dashboard] Removed ${ambId} from active runs`);
+      }, REMOVAL_GRACE_MS);
+    }
+
+    function mergeSimData(simAmbulances) {
+      let changed = false;
+      const simIds = new Set(simAmbulances.map(a => a.id));
+
+      simAmbulances.forEach(simAmb => {
+        const existing = p1Runs.find(r => r.id === simAmb.id);
+
+        if (!existing) {
+          /* New ambulance seen in simulation output — add it */
+          p1Runs.unshift({
+            ...simAmb,
+            dest: simAmb.destination,
+            progress: simAmb.status === 'Completed' ? 100 : 0,
+            source: 'sim'
+          });
+          addIncidentFromRun({ ...simAmb, dest: simAmb.destination });
+          changed = true;
+
+          if (simAmb.status === 'En Route') {
+            showToast(`Simulation: ${simAmb.id} now En Route to ${simAmb.destination}`, 'ok');
+            knownIds.add(simAmb.id + ':En Route');
+          }
+        } else {
+          /* Existing run — check if status changed to Completed */
+          const prevStatus = existing.status;
+          const newStatus = simAmb.status;
+
+          /* Always sync latest sim data — but preserve locally-animated progress */
+          const savedProgress = existing.progress;
+          Object.assign(existing, simAmb, { dest: simAmb.destination, source: 'sim' });
+          if (newStatus !== 'Completed') existing.progress = savedProgress;
+
+          if (newStatus === 'Completed' && prevStatus !== 'Completed') {
+            existing.progress = 100;
+            if (existing._animHandle) { cancelAnimationFrame(existing._animHandle); delete existing._animHandle; }
+            changed = true;
+
+            const key = simAmb.id + ':Completed';
+            if (!knownIds.has(key)) {
+              knownIds.add(key);
+              showToast(`${simAmb.id} has arrived at ${simAmb.destination} — run complete`, 'ok');
+              showP1Toast(`${simAmb.id} arrived at ${simAmb.destination}`, 'ok');
+              markIncidentCompleted(simAmb.id);
+              scheduleRemoval(simAmb.id);
+            }
+          } else if (newStatus === 'En Route' && !existing._animHandle) {
+            /* Smooth rAF animator: fills bar over scenEvrt seconds, capping at 95% */
+            const scenEvrt  = (EVRT_BY_SCENARIO[simAmb.scenario] || 55) * 1000;
+            const startPct  = existing.progress || 0;
+            const startTime = performance.now();
+            const animId    = simAmb.id;
+            const animStep  = (now) => {
+              const elapsed = now - startTime;
+              const target  = Math.min(95, startPct + (elapsed / scenEvrt) * (95 - startPct));
+              existing.progress = target;
+              const fill = document.querySelector(`[data-ambid="${animId}"] .prog-fill`);
+              const lbl  = document.querySelector(`[data-ambid="${animId}"] .prog-pct`);
+              if (fill) fill.style.width = target.toFixed(1) + '%';
+              if (lbl)  lbl.textContent  = Math.round(target) + '%';
+              if (target < 95 && existing.status === 'En Route') {
+                existing._animHandle = requestAnimationFrame(animStep);
+              } else {
+                delete existing._animHandle;
+              }
+            };
+            existing._animHandle = requestAnimationFrame(animStep);
+            changed = true;
+          }
+        }
+      });
+
+      /*
+        Any run we know about locally that is no longer present in sumo_output.json
+        AND was previously Completed → schedule removal if not already scheduled.
+      */
+      p1Runs.forEach(r => {
+        if (!simIds.has(r.id) && r.status === 'Completed') {
+          scheduleRemoval(r.id);
+        }
+      });
+
+      if (changed) {
+        p1RenderSidebar();
+      }
+    }
+
+    /* ── Poll sumo_output.json ── */
+    async function pollSimulation() {
+      try {
+        const res = await fetch(SUMO_URL + '?t=' + Date.now()); /* cache-bust */
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+
+        if (Array.isArray(data.ambulances) && data.ambulances.length) {
+          mergeSimData(data.ambulances);
+        }
+
+        /* Update queue-cleared display if present */
+        if (data.queue_cleared_rate !== undefined) {
+          const clrEl = document.getElementById('p1-s-cleared');
+          if (clrEl) clrEl.textContent = data.queue_cleared_rate + '%';
+        }
+
+      } catch (err) {
+        /* Silently ignore — server/file not yet available */
+        console.log('sumo_output.json not reachable yet:', err.message);
+      }
+    }
+
+    /* ── Form dispatch (manual) ── */
+    async function p1Dispatch() {
+      const id = (document.getElementById('p1-f-id').value || '').trim() || ('AMB-' + String(p1Runs.length + 1).padStart(2, '0'));
+      const issue = (document.getElementById('p1-f-issue').value || 'Emergency').trim();
+      const origin = document.getElementById('p1-f-origin').value;
+      const dest = document.getElementById('p1-f-dest').value;
+      const scenario = document.querySelector('input[name="p1-sc"]:checked')?.value || 'D';
+      const evrt = EVRT_BY_SCENARIO[scenario];
+
+      /* Check for duplicate ID */
+      if (p1Runs.find(r => r.id === id && r.status === 'En Route')) {
+        showP1Toast('A run with that ID is already active', 'warn');
+        return;
+      }
+
+      const run = { id, issue, origin, dest, destination: dest, scenario, evrt, status: 'En Route', progress: 0, source: 'manual' };
+      p1Runs.unshift(run);
+      addIncidentFromRun(run);
+      p1RenderSidebar();
+
+      /* POST to Flask if available */
+      try {
+        await fetch(FLASK_URL + '/incident', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id, issue, origin, destination: dest,
+            scenario, evrt, status: 'En Route',
+            injury_level: 'Medium'   /* default; extend form if needed */
+          }),
+          signal: AbortSignal.timeout(2000)
+        });
+        showP1Toast(`${id} dispatched to ${dest} — Scenario ${scenario}`, 'ok');
+      } catch {
+        showP1Toast('Flask unreachable — saved locally. Awaiting simulation confirmation.', 'warn');
+      }
+
+      document.getElementById('p1-f-id').value = '';
+      document.getElementById('p1-f-issue').value = '';
+    }
+
+    /* ── Add an incident record from any ambulance trip ── */
+    const incidentAmbIds = new Set(); /* prevent double-adding the same trip */
+
+    function addIncidentFromRun(run) {
+      const key = run.id + ':' + (run.origin || '') + ':' + (run.dest || run.destination || '');
+      if (incidentAmbIds.has(key)) return;
+      incidentAmbIds.add(key);
+      incidents.push({
+        ambId:    run.id,
+        time:     fmtTime(),
+        type:     run.issue || 'Emergency',
+        pickup:   run.origin || '—',
+        hospital: run.dest || run.destination || 'City Hospital',
+        status:   run.status === 'Completed' ? 'Completed' : 'Dispatched'
+      });
+      renderHospital();
+    }
+
+    /* Mark an existing incident row as Completed when the ambulance arrives */
+    function markIncidentCompleted(ambId) {
+      const inc = incidents.find(i => i.ambId === ambId && i.status !== 'Completed');
+      if (inc) {
+        inc.status = 'Completed';
+        renderHospital();
+      }
+    }
+
+    /* ── Raise incident (Page 2) ── */
+    async function raiseIncident() {
+      const type = document.getElementById('inc-type').value;
+      const pickup = document.getElementById('inc-pickup').value;
+      const urgency = document.querySelector('input[name="urgency"]:checked')?.value || 'Critical';
+      const time = fmtTime();
+
+      const inc = { time, type, pickup, hospital: 'City Hospital', status: 'Dispatched' };
+      incidents.push(inc);
+      renderHospital();
+
+      try {
+        await fetch(FLASK_URL + '/incident', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type, pickup, urgency, hospital: 'City Hospital' }),
+          signal: AbortSignal.timeout(2000)
+        });
+        showToast('Incident raised — ambulance dispatching!', 'ok');
+      } catch {
+        showToast('Flask unreachable — incident saved locally', 'warn');
+      }
+
+      document.getElementById('confirm-area').innerHTML = `
+    <div class="confirm-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:12px;font-weight:500;color:#34d399">Incident Raised</span>
+        <span class="badge b-amber">Dispatching...</span>
+      </div>
+      <div style="font-size:12px;color:#94a3b8"><strong style="color:#e2e8f0">${type}</strong> | ${pickup} | ${urgency}</div>
+      <div style="font-size:11px;color:#64748b;margin-top:4px">${time} — City Hospital</div>
+    </div>`;
+    }
+
+    /* ── Boot ── */
+    const fOrigin = document.getElementById('p1-f-origin');
+    if (fOrigin) fOrigin.innerHTML = INT_LABELS.map(l => `<option>${l}</option>`).join('');
+
+    const fPickup = document.getElementById('inc-pickup');
+    if (fPickup) fPickup.innerHTML = INT_LABELS.map(l => `<option>${l}</option>`).join('');
+
+    /* Load initial state from sumo_output.json, then start polling */
+    pollSimulation().then(() => {
+      p1RenderSidebar();
+    });
+
+    setInterval(pollSimulation, POLL_MS);
+  </script>
+</body>
+
+</html>

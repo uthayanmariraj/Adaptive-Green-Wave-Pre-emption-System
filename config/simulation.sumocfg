@@ -1,0 +1,19 @@
+<configuration>
+    <input>
+        <net-file value="../network/grid.net.xml"/>
+        <route-files value="../network/grid.rou.xml,
+                            ../ambulance/ambulance.rou.xml"/>
+    </input>
+    <time>
+        <begin value="0"/>
+        <end value="600"/>
+        <step-length value="1.0"/>
+    </time>
+    <output>
+        <tripinfo-output value="../results/tripinfo.xml"/>
+    </output>
+    <processing>
+        <collision.action value="warn"/>
+        <time-to-teleport value="300"/>
+    </processing>
+</configuration>
